@@ -1,6 +1,5 @@
 import {
   Crime as CrimePrisma,
-  Prisma,
   Criminoso as CriminosoPrisma,
 } from "@prisma/client";
 import { prisma } from "../database/prisma.database";
@@ -9,17 +8,18 @@ import {
   CreateCriminosoDto,
   CriminosoDto,
   QueryFilterDto,
-} from "../dtos/criminoso.dto";
+} from "../dtos/delegacia";
 
 export class CriminosoService {
   public async create(
     createCriminoso: CreateCriminosoDto
   ): Promise<ResponseApi> {
-    const { nome } = createCriminoso;
+    const { nome, situacao } = createCriminoso;
 
     const criminosoCriado = await prisma.criminoso.create({
       data: {
         nome: nome,
+        situacao: situacao,
       },
     });
 
@@ -32,7 +32,11 @@ export class CriminosoService {
   }
 
   public async findAll({ nome }: QueryFilterDto): Promise<ResponseApi> {
-    const criminosos = await prisma.criminoso.findMany();
+    const criminosos = await prisma.criminoso.findMany({
+      where: {
+        nome: nome ? { contains: nome, mode: "insensitive" } : undefined,
+      },
+    });
     return {
       ok: true,
       code: 200,
@@ -71,10 +75,12 @@ export class CriminosoService {
     return {
       id: criminoso.id,
       nome: criminoso.nome,
+      situacao: criminoso.situacao,
       crimes: criminoso.crimes?.map((crime) => ({
         id: crime.id,
+        nome: crime.nome,
         descricao: crime.descricao,
-        data: crime.createdAt.toLocaleDateString,
+        ocorrencia: crime.createdAt,
       })),
     };
   }

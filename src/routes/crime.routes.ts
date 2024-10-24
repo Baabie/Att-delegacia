@@ -1,19 +1,19 @@
 import { Router } from "express";
-
+import { CrimeMiddleware } from "../middlewares/crime.middleware";
+import { CrimeController } from "../controllers/crime.controller";
 export class CrimeRoutes {
   public static execute(): Router {
     const router = Router();
 
-    router.post("/criminosos");
+    //CREATE
+    router.post("/crimes", CrimeMiddleware.validate, CrimeController.create);
 
-    router.get("/criminosos", []);
+    // FIND ALL
+    router.get("/crimes", CrimeController.findAll);
 
-    router.post("/crimes", CreateCrimeMiddleware);
+    // FIND ONE
+    router.get("/crimes/:id", CrimeController.findOneById);
 
-    router.get("/crimes");
-
-    router.post("/armas");
-
-    router.get("/armas");
+    return router;
   }
 }
