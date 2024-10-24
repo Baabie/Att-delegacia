@@ -13,25 +13,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Arma {
+model Criminoso {
   id   String @id @default(uuid()) @db.Uuid
-  nome String @db.VarChar(50)
+  nome String @db.VarChar(100)
 
   createdAt DateTime @default(now()) @db.Date()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Date()
   Crime     Crime[]
 
-  @@map("armas")
+  @@map("criminosos")
 }
 
 model Crime {
-  id        String @id @default(uuid()) @db.Uuid
-  descricao String
-  arma      Arma   @relation(fields: [armaId], references: [id])
-  armaId    String @map("arma_id") @db.Uuid
+  id          String    @id @default(uuid()) @db.Uuid
+  descricao   String
+  criminoso   Criminoso @relation(fields: [criminosoId], references: [id])
+  criminosoId String    @map("criminoso_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @db.Date()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Date()
+  Arma      Arma[]
+
+  @@map("crimes")
+}
+
+model Arma {
+  id      String @id @default(uuid()) @db.Uuid
+  nome    String @db.VarChar(50)
+  crime   Crime  @relation(fields: [crimeId], references: [id])
+  crimeId String @map("crime_id") @db.Uuid
 
   createdAt DateTime @default(now()) @db.Date()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Date()
 
-  @@map("crimes")
+  @@map("armas")
 }
