@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ArmaController } from "../controllers/arma.controller";
 import { ArmaMiddleware } from "../middlewares/arma.middleware";
-export class CrimeRoutes {
+export class ArmaRoutes {
   public static execute(): Router {
     const router = Router();
 
