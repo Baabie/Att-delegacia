@@ -12,7 +12,7 @@ export interface CreateCrimeDto {
 export interface CreateArmaDto {
   nome: string;
   condicao: string;
-  crimeId?: string;
+  crimeId: string;
 }
 
 export interface CriminosoDto {
@@ -35,9 +35,15 @@ export interface ArmaDto {
   id: string;
   nome: string;
   condicao: string;
+  crime?: {
+    id: string;
+    nome: string;
+    descricao: string;
+  };
 }
 
 export interface QueryFilterDto {
   nome?: string;
   descricao?: string;
+  condicao?: string;
 }
